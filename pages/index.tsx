@@ -1,10 +1,12 @@
 import authRequired from '@services/authRequired'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import LoadingScreen from '@components/ui/LoadingScreen'
 import MainLayout from '@components/ui/MainLayout'
+import { message, Button } from 'antd'
 
 export default function Home() {
   const user = authRequired({})
+  const [show, setShow] = useState(false)
 
   if (!user) {
     return <LoadingScreen />

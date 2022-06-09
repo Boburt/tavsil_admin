@@ -20,7 +20,7 @@ import { useRouter } from 'next/router'
 import { useDarkMode } from 'next-dark-mode'
 // import { useAuth } from "../../services/useAuth";
 import styles from './MainLayout.module.css'
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useEffect } from 'react'
 import { useUI } from '@components/ui/context'
 
 const { Header, Content, Footer, Sider } = Layout
@@ -154,11 +154,17 @@ export default function MainLayout({
             <Menu.Item key="/users" icon={<UserOutlined />}>
               <Link href="/users">Пользователи</Link>
             </Menu.Item>
-            <Menu.Item key="/menus" icon={<MenuOutlined />}>
+            {/* <Menu.Item key="/menus" icon={<MenuOutlined />}>
               <Link href="/menus">Пункты меню</Link>
+            </Menu.Item> */}
+            <Menu.Item key="/create_menu" icon={<MenuOutlined />}>
+              <Link href="/create_menu">Меню</Link>
             </Menu.Item>
             <Menu.Item key="/catalog" icon={<MenuOutlined />}>
               <Link href="/catalog">Каталог</Link>
+            </Menu.Item>
+            <Menu.Item key="/order" icon={<MenuOutlined />}>
+              <Link href="/order">Заказы</Link>
             </Menu.Item>
             <Menu.Item key="/modifiers" icon={<MenuOutlined />}>
               <Link href="/modifiers">Модификаторы</Link>

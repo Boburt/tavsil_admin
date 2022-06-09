@@ -220,8 +220,11 @@ const CatalogPage = function () {
 
   // Drawers
   const [isDrawerVisible, setDrawer] = useState(false)
+  //const [isCatEditDrawerVisible, setCatEditDrawer] = useState(false)
   const [isVariantDrawerVisible, setVariantDrawer] = useState(false)
   const [isMergeDrawerVisible, setMergeDrawerVisible] = useState(false)
+  const [isAddDrawerVisible, setAddDrawerVisible] = useState(false)
+  const [isAddProductDrawer, setIsAddProductDrawer] = useState(false)
 
   // Editing
   const [editingCategory, setEditingCategory] = useState(null as any)
@@ -235,8 +238,11 @@ const CatalogPage = function () {
 
   // Form submit loaders
   const [isSubmittingForm, setIsSubmittingForm] = useState(false)
+  //const [isCatEditSubmittingForm, setIsCatEditSubmittingForm] = useState(false)
   const [isVariantSubmittingForm, setIsVariantSubmittingForm] = useState(false)
   const [isMergeSubmittingForm, setIsMergeSubmittingForm] = useState(false)
+  const [isAddProductSubmittingForm, setisAddProductSubmittingForm] =
+    useState(false)
 
   // Table datas
   const [data, setData] = useState([])
@@ -268,6 +274,7 @@ const CatalogPage = function () {
   const [form] = Form.useForm()
   const [mergeForm] = Form.useForm()
   const [variantForm] = Form.useForm()
+  const [newProductForm] = Form.useForm()
 
   const editCategory = () => {
     let cities = []
@@ -289,6 +296,14 @@ const CatalogPage = function () {
     })
     setDrawer(true)
   }
+
+  // const addCategory = () => {
+  //   let cities = []
+
+  //   form.resetFields()
+
+  //   setDrawer(true)
+  // }
 
   const editProduct = () => {
     const prod = selectedProducts[0]
@@ -324,35 +339,50 @@ const CatalogPage = function () {
     setMergeDrawerVisible(true)
   }
 
-  const editVariant = () => {
-    setEditingVariant(selectedVariant)
-    let name = selectedVariant.attribute_data.name[channelName]
-    let values = {
-      name_ru: name.ru,
-      name_uz: name.uz,
-      name_en: name.en,
-      custom_name: selectedVariant.custom_name,
-      custom_name_uz: selectedVariant.custom_name_uz,
-      active: true,
-      modifier_prod_id: selectedVariant.modifier_prod_id,
-      box_id: selectedVariant.box_id,
-      additional_sales: [] as number[],
-    }
-    if (selectedVariant.additional_sales) {
-      values.additional_sales = selectedVariant.additional_sales.split(',')
-    }
-    variantForm.resetFields()
-    variantForm.setFieldsValue(values)
-    setVariantDrawer(true)
+  const addProduct = () => {
+    setIsAddProductDrawer(true)
   }
+
+  // const editVariant = () => {
+  //   setEditingVariant(selectedVariant)
+  //   let name = selectedVariant.attribute_data.name[channelName]
+  //   let values = {
+  //     name_ru: name.ru,
+  //     name_uz: name.uz,
+  //     name_en: name.en,
+  //     custom_name: selectedVariant.custom_name,
+  //     custom_name_uz: selectedVariant.custom_name_uz,
+  //     active: true,
+  //     modifier_prod_id: selectedVariant.modifier_prod_id,
+  //     box_id: selectedVariant.box_id,
+  //     additional_sales: [] as number[],
+  //   }
+  //   if (selectedVariant.additional_sales) {
+  //     values.additional_sales = selectedVariant.additional_sales.split(',')
+  //   }
+  //   variantForm.resetFields()
+  //   variantForm.setFieldsValue(values)
+  //   setVariantDrawer(true)
+  // }
 
   const closeDrawer = () => {
     setEditingCategory(null)
     setDrawer(false)
   }
 
+  // const closeCatEditDrawer = () => {
+  //   setEditingCategory(true)
+  //   setCatEditDrawer(false)
+  // }
+
   const closeMergeDrawer = () => {
+    setEditingCategory(null)
     setMergeDrawerVisible(false)
+  }
+
+  const closeAddProductDrawer = () => {
+    setEditingCategory(null)
+    setIsAddProductDrawer(false)
   }
 
   const closeVariantDrawer = () => {
@@ -392,18 +422,20 @@ const CatalogPage = function () {
     )
     setProducts(result)
     setIsMenuLoading(false)
+    console.log(result)
+    console.log(selectedId)
   }
 
-  const fetchVariants = async (selectedId: number = 0) => {
-    setIsVariantsLoading(true)
-    const {
-      data: { data: result },
-    } = await axios.get(
-      `${webAddress}/api/products/variants?product_id=${selectedId}`
-    )
-    setVariants(result)
-    setIsVariantsLoading(false)
-  }
+  // const fetchVariants = async (selectedId: number = 0) => {
+  //   setIsVariantsLoading(true)
+  //   const {
+  //     data: { data: result },
+  //   } = await axios.get(
+  //     `${webAddress}/api/products/variants?product_id=${selectedId}`
+  //   )
+  //   setVariants(result)
+  //   setIsVariantsLoading(false)
+  // }
 
   const setAxiosCredentials = async () => {
     let csrf = Cookies.get('X-XSRF-TOKEN')
@@ -429,12 +461,15 @@ const CatalogPage = function () {
     axios.defaults.headers.common['XCSRF-TOKEN'] = csrf
   }
 
-  const submitVariantForm = () => {
-    variantForm.submit()
-  }
+  // const submitVariantForm = () => {
+  //   variantForm.submit()
+  // }
 
   const submitMergeForm = () => {
     mergeForm.submit()
+  }
+  const submitNewProductForm = () => {
+    newProductForm.submit()
   }
 
   const submitForm = () => {
@@ -457,6 +492,26 @@ const CatalogPage = function () {
     closeDrawer()
     fetchData()
   }
+
+  // const onAddCategory = async (values: any) => {
+  //   setIsSubmittingForm(true)
+  //   await setAxiosCredentials()
+
+  //   //let cities = values.cities.join(',')
+  //   await axios.post(`${webAddress}/api/categories/`, {
+  //     ...values,
+  //     attribute_data: {
+  //       name: { ru: values.name_ru, uz: values.name_uz, en: values.name_en },
+  //     },
+  //     active: values.active ? '1' : '0',
+  //     half_mode: values.half_mode ? '1' : '0',
+  //     cities,
+  //   })
+
+  //   setIsSubmittingForm(false)
+  //   closeDrawer()
+  //   fetchData()
+  // }
 
   const onProductsFinish = async (values: any) => {
     setIsMergeSubmittingForm(true)
@@ -499,28 +554,64 @@ const CatalogPage = function () {
     fetchProducts(selectedCategory.id)
   }
 
-  const onVariantFinish = async (values: any) => {
-    setIsVariantSubmittingForm(true)
+  const onNewProductsFinish = async (values: any) => {
+    //setIsNewProductSubmittingForm(true)
     await setAxiosCredentials()
 
-    if (values.additional_sales) {
-      values.additional_sales = values.additional_sales.join(',')
+    const otpToken = Cookies.get('opt_token')
+
+    if (selectedCategory) {
+      await axios.post(
+        `${webAddress}/api/products`,
+        {
+          ...values,
+          categoryId: selectedCategory.id,
+          attribute_data: {
+            name: {
+              ru: values.name_ru,
+              uz: values.name_uz,
+              en: values.name_en,
+            },
+          },
+          active: values.active ? '1' : '0',
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${otpToken}`,
+          },
+          withCredentials: true,
+        }
+      )
     }
 
-    await axios.put(`${webAddress}/api/products/${selectedVariant.id}`, {
-      ...values,
-      active: true,
-    })
-
-    setIsVariantSubmittingForm(false)
-    closeVariantDrawer()
-    let editableCount = selectedProducts.filter(
-      (prod) => !prod.product_id && prod.price <= 0
-    )
-    if (editableCount.length === 1) {
-      fetchVariants(editableCount[0].id)
-    }
+    //setIsNewProductSubmittingForm(false)
+    closeAddProductDrawer()
+    fetchProducts()
   }
+
+  // const onVariantFinish = async (values: any) => {
+  //   setIsVariantSubmittingForm(true)
+  //   await setAxiosCredentials()
+
+  //   if (values.additional_sales) {
+  //     values.additional_sales = values.additional_sales.join(',')
+  //   }
+
+  //   await axios.put(`${webAddress}/api/products/${selectedVariant.id}`, {
+  //     ...values,
+  //     active: true,
+  //   })
+
+  //   setIsVariantSubmittingForm(false)
+  //   closeVariantDrawer()
+  //   let editableCount = selectedProducts.filter(
+  //     (prod) => !prod.product_id && prod.price <= 0
+  //   )
+  //   if (editableCount.length === 1) {
+  //     fetchVariants(editableCount[0].id)
+  //   }
+  // }
 
   const deleteAsset = async (assetId: number) => {
     await setAxiosCredentials()
@@ -758,9 +849,9 @@ const CatalogPage = function () {
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item name="half_mode" valuePropName="checked">
+              {/* <Form.Item name="half_mode" valuePropName="checked">
                 <Checkbox>Режим &quot;50/50&quot;</Checkbox>
-              </Form.Item>
+              </Form.Item> */}
             </Col>
           </Row>
           <Row gutter={16}>
@@ -854,148 +945,6 @@ const CatalogPage = function () {
         </Form>
       </Drawer>
 
-      <Drawer
-        title={
-          editingVariant ? 'Редактировать вариант' : 'Добавить новую категорию'
-        }
-        width={720}
-        onClose={closeVariantDrawer}
-        visible={isVariantDrawerVisible}
-        bodyStyle={{ paddingBottom: 80 }}
-        footer={
-          <div
-            style={{
-              textAlign: 'right',
-            }}
-          >
-            <Button onClick={closeVariantDrawer} style={{ marginRight: 8 }}>
-              Отмена
-            </Button>
-            <Button
-              onClick={submitVariantForm}
-              loading={isVariantSubmittingForm}
-              type="primary"
-            >
-              Сохранить
-            </Button>
-          </div>
-        }
-      >
-        <Form
-          layout="vertical"
-          form={variantForm}
-          size="small"
-          onFinish={onVariantFinish}
-          initialValues={editingVariant ? editingVariant : undefined}
-        >
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                name="name_ru"
-                label="Название товара(рус)"
-                rules={[{ required: true, message: 'Просьба ввести название' }]}
-              >
-                <Input placeholder="Просьба ввести название" />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                name="name_uz"
-                label="Название товара(узб)"
-                rules={[{ required: true, message: 'Просьба ввести название' }]}
-              >
-                <Input placeholder="Просьба ввести название" />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                name="name_en"
-                label="Название товара(анг)"
-                rules={[{ required: true, message: 'Просьба ввести название' }]}
-              >
-                <Input placeholder="Просьба ввести название" />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                name="custom_name"
-                label="Заголовок варианта(RU)"
-                rules={[
-                  { required: true, message: 'Просьба ввести заголовок' },
-                ]}
-              >
-                <Input placeholder="Просьба ввести заголовок" />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                name="custom_name_uz"
-                label="Заголовок варианта(UZ)"
-                rules={[
-                  { required: true, message: 'Просьба ввести заголовок' },
-                ]}
-              >
-                <Input placeholder="Просьба ввести заголовок" />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                name="modifier_prod_id"
-                label="Товар для сосисочного борта"
-              >
-                <Select
-                  showSearch
-                  placeholder="Выберите товар"
-                  optionFilterProp="children"
-                >
-                  {modifierProductList.map((prod: any) => (
-                    <Option value={prod.id} key={prod.id}>
-                      {prod.attribute_data['name'][channelName]['ru']}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item name="box_id" label="Выберите коробку">
-                <Select
-                  showSearch
-                  placeholder="Выберите товар"
-                  optionFilterProp="children"
-                >
-                  {modifierProductList.map((prod: any) => (
-                    <Option value={prod.id} key={prod.id}>
-                      {prod.attribute_data['name'][channelName]['ru']}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item name="additional_sales" label="Товар для доп. продажи">
-                <Select
-                  showSearch
-                  placeholder="Выберите товар"
-                  optionFilterProp="children"
-                  mode="multiple"
-                >
-                  {modifierProductList.map((prod: any) => (
-                    <Option value={prod.id} key={prod.id}>
-                      {prod.attribute_data['name'][channelName]['ru']}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Col>
-          </Row>
-        </Form>
-      </Drawer>
       <Drawer
         title={isMergingMode ? 'Объединить товары' : 'Сохранить товар'}
         width={720}
@@ -1146,7 +1095,7 @@ const CatalogPage = function () {
               </Col>
             </Row>
           )}
-          {!isMergingMode && (
+          {/* {!isMergingMode && (
             <>
               <Row gutter={16}>
                 <Col span={12}>
@@ -1209,13 +1158,211 @@ const CatalogPage = function () {
                 </Col>
               </Row>
             </>
-          )}
+          )} */}
+        </Form>
+      </Drawer>
+      {/* add new product */}
+      <Drawer
+        title={'Добавить новый продукт'}
+        width={720}
+        onClose={closeAddProductDrawer}
+        visible={isAddProductDrawer}
+        bodyStyle={{ paddingBottom: 80 }}
+        footer={
+          <div
+            style={{
+              textAlign: 'right',
+            }}
+          >
+            <Button onClick={closeAddProductDrawer} style={{ marginRight: 8 }}>
+              Отмена
+            </Button>
+            <Button
+              onClick={submitNewProductForm}
+              loading={isAddProductSubmittingForm}
+              type="primary"
+            >
+              Сохранить
+            </Button>
+          </div>
+        }
+      >
+        <Form
+          layout="vertical"
+          form={newProductForm}
+          size="small"
+          onFinish={onNewProductsFinish}
+        >
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                name="name_ru"
+                label="Заголовок(RU)"
+                rules={[
+                  { required: true, message: 'Просьба ввести заголовок' },
+                ]}
+              >
+                <Input placeholder="Просьба ввести заголовок" />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="name_uz"
+                label="Заголовок(UZ)"
+                rules={[
+                  { required: true, message: 'Просьба ввести заголовок' },
+                ]}
+              >
+                <Input placeholder="Просьба ввести заголовок" />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="name_en"
+                label="Заголовок(EN)"
+                rules={[
+                  { required: true, message: 'Просьба ввести заголовок' },
+                ]}
+              >
+                <Input placeholder="Просьба ввести заголовок" />
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Row gutter={16}>
+            <Col span={8}>
+              <Form.Item name="sort" label="Сортировка">
+                <InputNumber />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item name="weight" label="Вес">
+                <InputNumber />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item
+                name="price"
+                label="Цена"
+                rules={[{ required: true, message: 'Просьба ввести цену' }]}
+              >
+                <InputNumber />
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item name="active" valuePropName="checked">
+                <Checkbox>Активность</Checkbox>
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item name="box_id" label="Выберите коробку">
+                <Select
+                  showSearch
+                  placeholder="Выберите товар"
+                  optionFilterProp="children"
+                >
+                  {modifierProductList.map((prod: any) => (
+                    <Option value={prod.id} key={prod.id}>
+                      {prod.attribute_data['name'][channelName]['ru']}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col span={24}>
+              <Dragger {...dropProps}>
+                <div>
+                  <p className="ant-upload-drag-icon">
+                    <InboxOutlined />
+                  </p>
+                  <p className="ant-upload-text">
+                    Нажмите или перетащите файл в эту область, чтобы загрузить
+                  </p>
+                </div>
+              </Dragger>
+            </Col>
+          </Row>
+
+          <>
+            <Row gutter={16}>
+              <Col span={12}>
+                <Form.Item
+                  name="additional_sales"
+                  label="Товар для доп. продажи"
+                >
+                  <Select
+                    showSearch
+                    placeholder="Выберите товар"
+                    optionFilterProp="children"
+                    mode="multiple"
+                  >
+                    {modifierProductList.map((prod: any) => (
+                      <Option value={prod.id} key={prod.id}>
+                        {prod.attribute_data['name'][channelName]['ru']}
+                      </Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              </Col>
+            </Row>
+            {/* <Row gutter={16}>
+              <Col span={24}>
+                <Form.Item name="description_ru" label="Описание(RU)">
+                  <ReactQuill
+                    theme="snow"
+                    value={ruDescriptionEditorState || ''}
+                    onChange={(content: string) => {
+                      setRuDescriptionEditorState(content)
+                    }}
+                  />
+                </Form.Item>
+              </Col>
+            </Row> */}
+            {/* <Row gutter={16}>
+              <Col span={24}>
+                <Form.Item name="description_uz" label="Описание(UZ)">
+                  <ReactQuill
+                    theme="snow"
+                    value={uzDescriptionEditorState || ''}
+                    onChange={(content: string) => {
+                      setUzDescriptionEditorState(content)
+                    }}
+                  />
+                </Form.Item>
+              </Col>
+            </Row> */}
+            {/* <Row gutter={16}>
+              <Col span={24}>
+                <Form.Item name="description_en" label="Описание(EN)">
+                  <ReactQuill
+                    theme="snow"
+                    value={enDescriptionEditorState || ''}
+                    onChange={(content: string) => {
+                      setEnDescriptionEditorState(content)
+                    }}
+                  />
+                </Form.Item>
+              </Col>
+            </Row> */}
+          </>
         </Form>
       </Drawer>
       <Row gutter={16}>
-        <Col span={4}>
+        <Col span={6}>
           <div className="font-bold text-xl mb-3">Категории</div>
           <div className="flex justify-between mb-3">
+            {/* <Button type="primary" onClick={editCategory}>
+              <PlusOutlined /> Добавить
+            </Button> */}
             <Button
               type="primary"
               onClick={editCategory}
@@ -1236,22 +1383,19 @@ const CatalogPage = function () {
             )}
           />
         </Col>
-        <Col span={12}>
+        <Col span={14}>
           <div className="font-bold text-xl mb-3">Продукты</div>
           <div className="flex space-x-2 mb-3">
             <Button
               type="primary"
-              onClick={startMergeProducts}
-              disabled={
-                selectedProductsCount < 2 ||
-                selectedProductsCount != selectedProducts.length
-              }
+              disabled={!selectedCategory}
+              onClick={addProduct}
             >
-              <MergeCellsOutlined /> Объединить {selectedProductsCount}
+              <PlusOutlined /> Добавить продукт
             </Button>
             <Button
               type="primary"
-              onClick={editProduct}
+              onClick={addProduct}
               disabled={!activeProductEdit}
             >
               <EditOutlined /> Редактировать
@@ -1277,19 +1421,19 @@ const CatalogPage = function () {
                 setSelectedProducts(selectedRows)
                 setProdSelectedRowKeys(selectedRowKeys)
                 setSelectedVariant(null)
-                let editableCount = selectedRows.filter(
-                  (prod) => !prod.product_id && prod.price <= 0
-                )
-                if (editableCount.length === 1) {
-                  fetchVariants(editableCount[0].id)
-                } else {
-                  setVariants([])
-                }
+                // let editableCount = selectedRows.filter(
+                //   (prod) => !prod.product_id && prod.price <= 0
+                // )
+                // if (editableCount.length === 1) {
+                //   fetchVariants(editableCount[0].id)
+                // } else {
+                //   setVariants([])
+                // }
               },
             }}
           />
         </Col>
-        <Col span={8}>
+        {/* <Col span={8}>
           <div className="font-bold text-xl mb-3">Варианты</div>
           <div className="flex space-x-2 mb-3">
             <Button
@@ -1315,7 +1459,7 @@ const CatalogPage = function () {
               },
             }}
           />
-        </Col>
+        </Col> */}
       </Row>
     </MainLayout>
   )
