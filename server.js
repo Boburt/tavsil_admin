@@ -10,9 +10,22 @@ const handle = app.getRequestHandler()
 
 app.prepare().then(() => {
   const server = express()
-  server.get(‘/service-worker.js’, (req, res) => {
-  app.serveStatic(req, res, './.next/service-worker.js');
-  });
+  // server.get('/service-worker.js', (req, res) => {
+  //   app.serveStatic(req, res, './.next/service-worker.js')
+  // })
+
+  // const serviceWorkers = [
+  //   {
+  //     filename: 'firebase-messaging-sw.js',
+  //     path: './public/firebase-messaging-sw.js',
+  //   },
+  // ];
+
+  // serviceWorkers.forEach(({ filename, path }) => {
+  //   server.get(`/${filename}`, (req, res) => {
+  //     app.serveStatic(req, res, path)
+  //   })
+  // })
   server.get('*', (req, res) => {
     return handle(req, res)
   })
@@ -28,5 +41,3 @@ app.prepare().then(() => {
     console.log(`> Ready on http://localhost:${process.env.PORT}`)
   })
 })
-
-

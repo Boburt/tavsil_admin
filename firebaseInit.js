@@ -13,6 +13,8 @@ const firebaseConfig = {
 
 export const app = initializeApp(firebaseConfig)
 
+export const messaging = getMessaging()
+
 export async function getFCMToken() {
   try {
     const messaging = getMessaging(app)
