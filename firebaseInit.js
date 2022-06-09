@@ -1,10 +1,5 @@
 import { initializeApp } from 'firebase/app'
-import {
-  getMessaging,
-  getToken,
-  onMessage,
-  messaging,
-} from 'firebase/messaging'
+import { getMessaging, getToken, onMessage } from 'firebase/messaging'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyCEPs0hwZzQxb3VrgOtmIjXR7UukVwdKyk',
@@ -17,6 +12,8 @@ const firebaseConfig = {
 }
 
 export const app = initializeApp(firebaseConfig)
+
+export const messaging = getMessaging()
 
 export async function getFCMToken() {
   try {

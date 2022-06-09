@@ -37,12 +37,12 @@ export default function Orders() {
     getFCMToken()
   }
 
-  const getNotification = () => {
-    const { onMessageListener } = require('../../firebaseInit')
-    onMessageListener()
-  }
+  // const getNotification = () => {
+  //   const { onMessageListener } = require('../../firebaseInit')
+  //   onMessageListener()
+  // }
   useEffect(() => {
-    getNotification()
+    // getNotification()
   }, [])
 
   const [products, setProducts] = useState([])
