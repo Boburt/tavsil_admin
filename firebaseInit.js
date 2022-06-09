@@ -1,10 +1,5 @@
 import { initializeApp } from 'firebase/app'
-import {
-  getMessaging,
-  getToken,
-  onMessage,
-  messaging,
-} from 'firebase/messaging'
+import { getMessaging, getToken, onMessage } from 'firebase/messaging'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyCEPs0hwZzQxb3VrgOtmIjXR7UukVwdKyk',
@@ -37,6 +32,7 @@ export async function getFCMToken() {
 
 export const onMessageListener = () =>
   new Promise((resolve) => {
+    const messaging = getMessaging(app)
     messaging.onMessage((payload) => {
       resolve(payload)
       console.log('Message received. ', payload)
