@@ -466,9 +466,10 @@ const CatalogPage = function () {
   //   variantForm.submit()
   // }
 
-  // const submitMergeForm = () => {
-  //   mergeForm.submit()
-  // }
+  const submitMergeForm = () => {
+    mergeForm.submit()
+  }
+
   const submitNewProductForm = () => {
     newProductForm.submit()
   }
@@ -954,9 +955,9 @@ const CatalogPage = function () {
           </Row>
         </Form>
       </Drawer>
-
+      {/* edit product */}
       <Drawer
-        title={isMergingMode ? 'Объединить товары' : 'Сохранить товар'}
+        title={isMergingMode ? 'Объединить товары' : 'Редактировать продукт'}
         width={720}
         onClose={closeMergeDrawer}
         visible={isMergeDrawerVisible}
@@ -970,13 +971,13 @@ const CatalogPage = function () {
             <Button onClick={closeMergeDrawer} style={{ marginRight: 8 }}>
               Отмена
             </Button>
-            {/* <Button
+            <Button
               onClick={submitMergeForm}
               loading={isMergeSubmittingForm}
               type="primary"
             >
               {isMergingMode ? 'Объединить' : 'Сохранить'}
-            </Button> */}
+            </Button>
           </div>
         }
       >
@@ -1105,7 +1106,7 @@ const CatalogPage = function () {
               </Col>
             </Row>
           )}
-          {/* {!isMergingMode && (
+          {!isMergingMode && (
             <>
               <Row gutter={16}>
                 <Col span={12}>
@@ -1168,7 +1169,7 @@ const CatalogPage = function () {
                 </Col>
               </Row>
             </>
-          )} */}
+          )}
         </Form>
       </Drawer>
       {/* add new product */}
@@ -1405,7 +1406,7 @@ const CatalogPage = function () {
             </Button>
             <Button
               type="primary"
-              onClick={addProduct}
+              onClick={editProduct}
               disabled={!activeProductEdit}
             >
               <EditOutlined /> Редактировать
@@ -1420,12 +1421,10 @@ const CatalogPage = function () {
             columns={productsColumns}
             dataSource={filteredProduct}
             loading={isMenuLoading}
-            expandable={{ expandedRowRender }}
-            rowKey="id"
-            size="small"
-            bordered
+            //expandable={{ expandedRowRender }}
+
             rowSelection={{
-              type: 'checkbox',
+              type: 'radio',
               selectedRowKeys: prodSelectedRowKeys,
               onChange: (selectedRowKeys: React.Key[], selectedRows: any[]) => {
                 setSelectedProducts(selectedRows)
@@ -1441,6 +1440,9 @@ const CatalogPage = function () {
                 // }
               },
             }}
+            rowKey="id"
+            size="small"
+            bordered
           />
         </Col>
         {/* <Col span={8}>
