@@ -32,19 +32,6 @@ export default function Orders() {
     }
   }, [])
 
-  const getToken = () => {
-    const { getFCMToken } = require('../../firebaseInit')
-    getFCMToken()
-  }
-
-  // const getNotification = () => {
-  //   const { onMessageListener } = require('../../firebaseInit')
-  //   onMessageListener()
-  // }
-  useEffect(() => {
-    // getNotification()
-  }, [])
-
   const [products, setProducts] = useState([])
   const [channelName, setChannelName] = useState('')
   const [productSearchText, setProductSearchText] = useState('')
@@ -167,9 +154,6 @@ export default function Orders() {
   return (
     <MainLayout title="Заказы">
       <div className="flex space-x-2 mb-3">
-        <Button type="primary" onClick={getToken}>
-          FCMToken
-        </Button>
         <Select
           defaultValue="lucy"
           style={{ width: 120 }}

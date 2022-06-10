@@ -228,6 +228,7 @@ const CatalogPage = function () {
 
   // Editing
   const [editingCategory, setEditingCategory] = useState(null as any)
+  //console.log(editingCategory)
   const [editingMenuRecord, setEditingMenuRecord] = useState(null as any)
   const [editingVariant, setEditingVariant] = useState(null as any)
   const [isMergingMode, setIsMergingMode] = useState(false)
@@ -297,13 +298,13 @@ const CatalogPage = function () {
     setDrawer(true)
   }
 
-  // const addCategory = () => {
-  //   let cities = []
+  const addCategory = () => {
+    let cities = []
 
-  //   form.resetFields()
+    form.resetFields()
 
-  //   setDrawer(true)
-  // }
+    setDrawer(true)
+  }
 
   const editProduct = () => {
     const prod = selectedProducts[0]
@@ -465,9 +466,9 @@ const CatalogPage = function () {
   //   variantForm.submit()
   // }
 
-  const submitMergeForm = () => {
-    mergeForm.submit()
-  }
+  // const submitMergeForm = () => {
+  //   mergeForm.submit()
+  // }
   const submitNewProductForm = () => {
     newProductForm.submit()
   }
@@ -483,6 +484,17 @@ const CatalogPage = function () {
       let cities = values.cities.join(',')
       await axios.put(`${webAddress}/api/categories/${editingCategory?.id}`, {
         ...values,
+        active: values.active ? '1' : '0',
+        half_mode: values.half_mode ? '1' : '0',
+        cities,
+      })
+    } else {
+      let cities = values.cities.join(',')
+      await axios.post(`${webAddress}/api/categories/`, {
+        ...values,
+        attribute_data: {
+          name: { ru: values.name_ru, uz: values.name_uz, en: values.name_en },
+        },
         active: values.active ? '1' : '0',
         half_mode: values.half_mode ? '1' : '0',
         cities,
@@ -876,49 +888,47 @@ const CatalogPage = function () {
               </Form.Item>
             </Col>
           </Row>
-          {editingCategory && (
-            <Row>
-              <Col span={24}>
-                {isCategoryShowUploader ? (
-                  <Dragger {...categoryDropProps}>
-                    <div>
-                      <p className="ant-upload-drag-icon">
-                        <InboxOutlined />
-                      </p>
-                      <p className="ant-upload-text">
-                        Нажмите или перетащите файл в эту область, чтобы
-                        загрузить
-                      </p>
-                    </div>
-                  </Dragger>
-                ) : (
+
+          <Row>
+            <Col span={24}>
+              {isCategoryShowUploader ? (
+                <Dragger {...categoryDropProps}>
                   <div>
-                    {editingCategory.asset && (
-                      <div className="relative w-28">
-                        <Image
-                          src={editingCategory.asset.link}
-                          width="100"
-                          height="100"
-                        />
-                        <div className="absolute top-0 right-0">
-                          <Button
-                            size="small"
-                            icon={<CloseOutlined />}
-                            danger
-                            shape="circle"
-                            type="primary"
-                            onClick={() =>
-                              setEditingCategory(editingCategory.asset.id)
-                            }
-                          ></Button>
-                        </div>
-                      </div>
-                    )}
+                    <p className="ant-upload-drag-icon">
+                      <InboxOutlined />
+                    </p>
+                    <p className="ant-upload-text">
+                      Нажмите или перетащите файл в эту область, чтобы загрузить
+                    </p>
                   </div>
-                )}
-              </Col>
-            </Row>
-          )}
+                </Dragger>
+              ) : (
+                <div>
+                  {editingCategory.asset && (
+                    <div className="relative w-28">
+                      <Image
+                        src={editingCategory.asset.link}
+                        width="100"
+                        height="100"
+                      />
+                      <div className="absolute top-0 right-0">
+                        <Button
+                          size="small"
+                          icon={<CloseOutlined />}
+                          danger
+                          shape="circle"
+                          type="primary"
+                          onClick={() =>
+                            setEditingCategory(editingCategory.asset.id)
+                          }
+                        ></Button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </Col>
+          </Row>
 
           <Row gutter={16}>
             <Col span={24}>
@@ -960,13 +970,13 @@ const CatalogPage = function () {
             <Button onClick={closeMergeDrawer} style={{ marginRight: 8 }}>
               Отмена
             </Button>
-            <Button
+            {/* <Button
               onClick={submitMergeForm}
               loading={isMergeSubmittingForm}
               type="primary"
             >
               {isMergingMode ? 'Объединить' : 'Сохранить'}
-            </Button>
+            </Button> */}
           </div>
         }
       >
@@ -1360,9 +1370,9 @@ const CatalogPage = function () {
         <Col span={6}>
           <div className="font-bold text-xl mb-3">Категории</div>
           <div className="flex justify-between mb-3">
-            {/* <Button type="primary" onClick={editCategory}>
+            <Button type="primary" onClick={addCategory}>
               <PlusOutlined /> Добавить
-            </Button> */}
+            </Button>
             <Button
               type="primary"
               onClick={editCategory}
