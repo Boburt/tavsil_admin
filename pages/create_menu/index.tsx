@@ -354,66 +354,64 @@ export default function Menus() {
   return (
     <MainLayout title="Меню">
       <div className="flex justify-end mb-2">
-        <>
-          <Button type="primary" onClick={showDrawer}>
-            <PlusOutlined /> Добавить
-          </Button>
-          <Drawer
-            title="Меню"
-            placement="right"
-            onClose={onClose}
-            visible={visible}
-            width={720}
-            footer={
-              <div
-                style={{
-                  textAlign: 'right',
-                }}
+        <Button type="primary" onClick={showDrawer}>
+          <PlusOutlined /> Добавить
+        </Button>
+        <Drawer
+          title="Меню"
+          placement="right"
+          onClose={onClose}
+          visible={visible}
+          width={720}
+          footer={
+            <div
+              style={{
+                textAlign: 'right',
+              }}
+            >
+              <Button onClick={onClose} style={{ marginRight: 8 }}>
+                Отмена
+              </Button>
+              <Button
+                onClick={onNewMenuFinish}
+                loading={isSubmittingForm}
+                type="primary"
               >
-                <Button onClick={onClose} style={{ marginRight: 8 }}>
-                  Отмена
-                </Button>
-                <Button
-                  onClick={onNewMenuFinish}
-                  loading={isSubmittingForm}
-                  type="primary"
-                >
-                  Сохранить
-                </Button>
-              </div>
-            }
-          >
-            <div>
-              <div className="font-bold text-xl mb-3">Продукты</div>
-              <div className="flex space-x-2 mb-3">
-                <Input.Search
-                  placeholder="Search..."
-                  allowClear
-                  onSearch={onSearch}
-                />
-              </div>
-              <Table
-                columns={productsColumns}
-                dataSource={filteredProduct}
-                loading={isMenuLoading}
-                rowKey="id"
-                size="small"
-                bordered
-                rowSelection={{
-                  type: 'checkbox',
-                  selectedRowKeys: prodSelectedRowKeys,
-                  onChange: (
-                    selectedRowKeys: React.Key[],
-                    selectedRows: any[]
-                  ) => {
-                    setSelectedProducts(selectedRows)
-                    setProdSelectedRowKeys(selectedRowKeys)
-                  },
-                }}
+                Сохранить
+              </Button>
+            </div>
+          }
+        >
+          <div>
+            <div className="font-bold text-xl mb-3">Продукты</div>
+            <div className="flex space-x-2 mb-3">
+              <Input.Search
+                placeholder="Search..."
+                allowClear
+                onSearch={onSearch}
               />
             </div>
-          </Drawer>
-        </>
+            <Table
+              columns={productsColumns}
+              dataSource={filteredProduct}
+              loading={isMenuLoading}
+              rowKey="id"
+              size="small"
+              bordered
+              rowSelection={{
+                type: 'checkbox',
+                selectedRowKeys: prodSelectedRowKeys,
+                onChange: (
+                  selectedRowKeys: React.Key[],
+                  selectedRows: any[]
+                ) => {
+                  setSelectedProducts(selectedRows)
+                  setProdSelectedRowKeys(selectedRowKeys)
+                },
+              }}
+            />
+          </div>
+        </Drawer>
       </div>
       <div className="flex  gap-4">
         <div className="w-[400px]">
@@ -423,7 +421,7 @@ export default function Menus() {
             onSelect={onDateSelect}
           />
         </div>
-        <div>
+        <div className="flex-grow">
           <div className="font-bold text-xl mb-3">Продукты</div>
           <div className="flex space-x-2 mb-3">
             <Input.Search
