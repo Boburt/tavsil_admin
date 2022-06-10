@@ -904,7 +904,7 @@ const CatalogPage = function () {
                 </Dragger>
               ) : (
                 <div>
-                  {editingCategory.asset && (
+                  {editingCategory && editingCategory.asset && (
                     <div className="relative w-28">
                       <Image
                         src={editingCategory.asset.link}
