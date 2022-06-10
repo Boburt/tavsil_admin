@@ -51,6 +51,7 @@ import {
 } from 'rc-upload/lib/interface'
 import type { CalendarMode } from 'antd/lib/calendar/generateCalendar'
 import type { Moment } from 'moment'
+import moment from 'moment'
 
 const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
@@ -90,8 +91,12 @@ export default function Menus() {
   const [products, setProducts] = useState([])
   const [selectedCategory, setSelectedCategory] = useState(null as any)
   const [selectedProducts, setSelectedProducts] = useState([] as any[])
-  const [dateSelected, setDateSelected] = useState('')
+  const [dateSelected, setDateSelected] = useState(
+    moment().format('YYYY-MM-DD')
+  )
   const [productsByDate, setProductsByDate] = useState([])
+
+  console.log(dateSelected)
 
   const showDrawer = () => {
     fetchProducts()
@@ -177,6 +182,10 @@ export default function Menus() {
 
   useEffect(() => {
     fetchData()
+  }, [])
+
+  useEffect(() => {
+    onDateSelect(moment(dateSelected))
   }, [])
 
   const productsColumns = [
@@ -317,6 +326,7 @@ export default function Menus() {
     //setIsNewProductSubmittingForm(false)
     setVisible(false)
     setProdSelectedRowKeys([])
+    onDateSelect(moment(dateSelected))
   }
 
   // const expandedRowRender = (record: any) => {
@@ -451,4 +461,7 @@ export default function Menus() {
       </div>
     </MainLayout>
   )
+}
+function value(value: any, Moment: any): [any, any] {
+  throw new Error('Function not implemented.')
 }
