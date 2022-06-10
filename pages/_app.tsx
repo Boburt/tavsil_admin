@@ -5,7 +5,7 @@ import { ManagedUIContext } from '@components/ui/context'
 import type { AppProps } from 'next/app'
 import { useEffect, useState } from 'react'
 
-import { firebaseCloudMessaging } from './webPush'
+import { firebaseCloudMessaging } from '../components/webPush'
 declare global {
   interface Window {
     firebase: any // 👈️ turn off type checking

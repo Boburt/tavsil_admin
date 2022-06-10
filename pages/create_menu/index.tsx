@@ -51,9 +51,6 @@ import {
 } from 'rc-upload/lib/interface'
 import type { CalendarMode } from 'antd/lib/calendar/generateCalendar'
 import type { Moment } from 'moment'
-import ProductTable from '@components/ProductTable'
-import moment from 'moment'
-import { DefaultValues } from 'react-hook-form'
 
 const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
