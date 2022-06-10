@@ -6,7 +6,7 @@ if (typeof window !== 'undefined') {
   userData = localStorage.getItem('mijoz')
   try {
     userData = Buffer.from(userData, 'base64')
-    userData = userData.toString('ascii')
+    userData = userData.toString()
     userData = JSON.parse(userData)
   } catch (e) {}
 }
