@@ -6,6 +6,7 @@ import type { AppProps } from 'next/app'
 import { useEffect, useState } from 'react'
 
 import { firebaseCloudMessaging } from '../components/webPush'
+import { RecoilRoot } from 'recoil'
 declare global {
   interface Window {
     firebase: any // 👈️ turn off type checking
@@ -26,8 +27,8 @@ function MyApp({ Component, pageProps }: AppProps) {
     }
   }
   function getMessage() {
-    const messaging = window.firebase.messaging()
-    messaging.onMessage((message: any) => console.log('foreground', message))
+    // const messaging = window.firebase.messaging()
+    // messaging.onMessage((message: any) => console.log('foreground', message))
   }
   useEffect(() => {
     setToken()
@@ -35,7 +36,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ManagedUIContext>
       <QueryClientProvider client={queryClient}>
-        <Component {...pageProps} />
+        <RecoilRoot>
+          <Component {...pageProps} />
+        </RecoilRoot>
       </QueryClientProvider>
     </ManagedUIContext>
   )

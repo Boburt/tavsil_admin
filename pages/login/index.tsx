@@ -8,6 +8,7 @@ import { Input, Form } from 'antd'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import getConfig from 'next/config'
+import localforage from 'localforage'
 import { useUI } from '@components/ui/context'
 
 axios.defaults.withCredentials = true
@@ -136,6 +137,7 @@ export default function Login() {
   const signIn = async (e: React.SyntheticEvent<EventTarget>) => {
     e.preventDefault()
 
+    const fcmToken = await localforage.getItem('fcm_token')
     setSubmitError('')
     const otpToken = Cookies.get('opt_token')
     let ress = await axios.post(
@@ -143,6 +145,7 @@ export default function Login() {
       {
         phone: '+998' + phoneValue,
         code: passwordValue,
+        token: fcmToken,
       },
       {
         headers: {

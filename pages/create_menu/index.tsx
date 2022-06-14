@@ -96,8 +96,6 @@ export default function Menus() {
   )
   const [productsByDate, setProductsByDate] = useState([])
 
-  console.log(dateSelected)
-
   const showDrawer = () => {
     fetchProducts()
     setVisible(true)

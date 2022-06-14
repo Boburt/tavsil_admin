@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { Input, Table, Select, Button } from 'antd'
+import { Input, Table, Select, DatePicker, Space } from 'antd'
 import type { ColumnsType, TableProps } from 'antd/lib/table'
 import MainLayout from '@components/ui/MainLayout'
 import currency from 'currency.js'
@@ -10,12 +10,18 @@ import authRequired from '@services/authRequired'
 import { useDarkMode } from 'next-dark-mode'
 import Cookies from 'js-cookie'
 
+import { ordersFilterState } from '@atoms/orders_filter'
+import { useRecoilState } from 'recoil'
+import moment from 'moment'
+
 const { publicRuntimeConfig } = getConfig()
 let webAddress = publicRuntimeConfig.apiUrl
 
 axios.defaults.withCredentials = true
 
 const { Option } = Select
+const { RangePicker } = DatePicker
+const dateFormat = 'YYYY-MM-DD'
 
 const handleChange = (value: string) => {
   console.log(`selected ${value}`)
@@ -38,9 +44,11 @@ export default function Orders() {
   const [isMenuLoading, setIsMenuLoading] = useState(false)
   const [show, setShow] = useState(false)
   const [notification, setNotification] = useState({ title: '', body: '' })
+  const [orderFilter, setOrderFilter] = useRecoilState(ordersFilterState)
 
   const fetchData = async () => {
     const channelData = await defaultChannel()
+    console.log(orderFilter)
     // const {
     //   data: { data: result },
     // } = await axios.get(`${webAddress}/api/categories?mode=tree`)
@@ -69,6 +77,11 @@ export default function Orders() {
     axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
     axios.defaults.headers.common['X-CSRF-TOKEN'] = csrf
     axios.defaults.headers.common['XCSRF-TOKEN'] = csrf
+  }
+
+  const onOrderDateFilterChange = (date: any, dateString: string[]) => {
+    console.log(dateString)
+    // setOrderFilter({ ...orderFilter, orderDate: dateString })
   }
 
   useEffect(() => {
@@ -154,6 +167,14 @@ export default function Orders() {
   return (
     <MainLayout title="Заказы">
       <div className="flex space-x-2 mb-3">
+        <RangePicker
+          defaultValue={[
+            moment(orderFilter.dateFrom, dateFormat),
+            moment(orderFilter.dateTo, dateFormat),
+          ]}
+          format={'DD.MM.YYYY'}
+          onCalendarChange={onOrderDateFilterChange}
+        />
         <Select
           defaultValue="lucy"
           style={{ width: 120 }}
