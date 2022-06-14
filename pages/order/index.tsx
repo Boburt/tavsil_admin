@@ -79,14 +79,24 @@ export default function Orders() {
     axios.defaults.headers.common['XCSRF-TOKEN'] = csrf
   }
 
-  const onOrderDateFilterChange = (date: any, dateString: string[]) => {
-    console.log(dateString)
-    // setOrderFilter({ ...orderFilter, orderDate: dateString })
+  const onOrderDateFilterChange = (
+    dates: moment.Moment[],
+    dateString: string[]
+  ) => {
+    console.log(dates)
+    // console.log(dateString)
+    setOrderFilter({
+      ...orderFilter,
+      dateFrom: dates[0]
+        ? dates[0].format('YYYY-MM-DD')
+        : dates[1].format('YYYY-MM-DD'),
+      dateTo: dates[1].format('YYYY-MM-DD'),
+    })
   }
 
   useEffect(() => {
     fetchData()
-  }, [])
+  }, [orderFilter])
 
   const onSearch = async (value: any) => {
     setProductSearchText(value)
